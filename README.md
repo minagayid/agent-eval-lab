@@ -39,6 +39,15 @@ predictions.json is an array matching Prediction in agent_eval/schema.py, exactl
 
 Scoring checks exact expected answers and successful calls, citation precision/completeness, retrieval relevance, unauthorized attempts, execution errors and transient recovery. A correct answer cannot cancel an unauthorized attempt or an invented citation. Fourteen failure codes include labeled-data requirements; unobserved conflict, injection and hallucination failures are not inferred.
 
+## Synthetic healthcare operations demo
+
+The [offline synthetic orchestrator example](https://github.com/minagayid/agent-eval-lab/tree/main/examples/synthetic_healthcare_orchestrator) demonstrates role-to-tool allowlists, a separate simulated review gate, minimized SHA-256-chained in-memory audit events, and sequential retry/idempotent replay. Run its walkthrough and focused tests:
+
+    python examples/synthetic_healthcare_orchestrator/demo.py
+    python -m unittest discover -s examples/synthetic_healthcare_orchestrator -p 'test_*.py' -v
+
+Its fixtures are synthetic and use fixed identifiers only. It accepts no free-text patient input and has no external adapters or clinical actions. The reviewer identity is simulated, the audit log is in memory, and concurrent calls are not synchronized. This is not a healthcare product, a clinical agent, HIPAA evidence, or proof of LLM prompt-injection resistance.
+
 ## Portfolio integration
 
 Clone Personizer, NovaDB, Genopedia, Neurapedia and robotic-surgery next to this repository, install their documented dependencies, then run:
