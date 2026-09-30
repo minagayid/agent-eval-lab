@@ -1,0 +1,8 @@
+import React,{useState} from 'react';
+import {createRoot} from 'react-dom/client';
+function App(){
+ const [report,setReport]=useState(null),[busy,setBusy]=useState(false),[error,setError]=useState('');
+ async function run(agent){setBusy(true);setError('');try{const res=await fetch('/api/runs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({agent})});if(!res.ok)throw new Error('Evaluation failed');setReport((await res.json()).report);}catch(e){setError(e.message);}finally{setBusy(false);}}
+ return <><p>Mina Gayid · Reliable agentic systems</p><h1>Agent Evaluation Lab</h1><article>100 synthetic local tasks. These scripted controls verify evaluation plumbing, recovery, citation checking and safety gates. They do not measure an LLM or clinical performance.</article><button disabled={busy} onClick={()=>run('v1')}>Run baseline v1</button><button disabled={busy} onClick={()=>run('v2')}>Run guarded v2</button><p role="status">{busy?'Running…':error}</p>{report&&<><h2>{report.agent}: {(report.summary.task_success_rate*100).toFixed(1)}% task success</h2><p>Dataset SHA-256: {report.dataset_sha256}</p><details><summary>Metrics and applicable denominators</summary><pre>{JSON.stringify(report.summary,null,2)}</pre></details><table><thead><tr><th>Task</th><th>Category</th><th>Success</th><th>Trace</th></tr></thead><tbody>{report.rows.map(r=><tr key={r.task_id}><td>{r.task_id}</td><td>{r.category}</td><td>{String(r.success)}</td><td><details><summary>{r.failures.join(', ')||'No observed failures'}</summary><pre>{JSON.stringify(r.prediction,null,2)}</pre></details></td></tr>)}</tbody></table></>}</>;
+}
+createRoot(document.getElementById('root')).render(<App/>);

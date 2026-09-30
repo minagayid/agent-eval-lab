@@ -1,0 +1,22 @@
+services:
+  api:
+    build: .
+    ports: ["127.0.0.1:8000:8000"]
+    environment:
+      DATABASE_URL: postgresql://eval:local-development-only@db:5432/eval
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: eval
+      POSTGRES_PASSWORD: local-development-only
+      POSTGRES_DB: eval
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U eval"]
+      interval: 5s
+      retries: 10
+    volumes: ["eval-db:/var/lib/postgresql/data"]
+volumes:
+  eval-db:

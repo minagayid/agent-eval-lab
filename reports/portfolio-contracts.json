@@ -1,0 +1,269 @@
+{
+  "scope": "five local synthetic contract checks; not real agent, clinical, scientific or hardware performance",
+  "revisions": {
+    "personizer": {
+      "base_commit": "5301a0932ef93bfc6d8735efc6c5723bd784f712",
+      "working_tree_modified": true
+    },
+    "novadb-engine": {
+      "base_commit": "017e2f9aa797d0545f833b5324f47d0ed12f0852",
+      "working_tree_modified": true
+    },
+    "genopedia": {
+      "base_commit": "3fb0e66574677ab4c8a1a9af18328fc4df8f1ec4",
+      "working_tree_modified": true
+    },
+    "neurapedia": {
+      "base_commit": "917dc848bda1732614abc6b8eabd21a07813566a",
+      "working_tree_modified": true
+    },
+    "robotic-surgery": {
+      "base_commit": "f369a81cae6eb33a8499afee6023c27de06700eb",
+      "working_tree_modified": true
+    }
+  },
+  "checks": [
+    {
+      "project": "personizer",
+      "check": "workflow_and_permissions",
+      "passed": true,
+      "trace": [
+        {
+          "timestamp": "2026-09-30T08:27:50.910303+00:00",
+          "tool": "retrieve_protocol",
+          "arguments": {
+            "fixture_id": "fixture-001"
+          },
+          "result": {
+            "text": "Synthetic intake: collect fictional case ID, retrieve protocol, request human review.",
+            "source_id": "fixture-001",
+            "synthetic": true
+          },
+          "status": "ok",
+          "error": null,
+          "latency_ms": 0.02254400010315294
+        },
+        {
+          "timestamp": "2026-09-30T08:27:50.910333+00:00",
+          "tool": "request_review",
+          "arguments": {
+            "fixture_id": "fixture-001"
+          },
+          "result": {
+            "review_requested": true,
+            "synthetic": true
+          },
+          "status": "ok",
+          "error": null,
+          "latency_ms": 0.004416999900058727
+        }
+      ],
+      "blocked_trace": [
+        {
+          "timestamp": "2026-09-30T08:27:50.910347+00:00",
+          "tool": "simulate_schedule",
+          "arguments": {
+            "fixture_id": "fixture-001"
+          },
+          "result": null,
+          "status": "blocked",
+          "error": "permission_denied",
+          "latency_ms": 0.0024739999844314298
+        }
+      ]
+    },
+    {
+      "project": "novadb-engine",
+      "check": "isolation_and_durable_reopen",
+      "passed": true,
+      "provenance": "fixture-v1"
+    },
+    {
+      "project": "genopedia",
+      "check": "lexical_source_retrieval",
+      "passed": true,
+      "metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "mrr": 1.0
+      },
+      "retrieved_sources": [
+        {
+          "source_id": "fixture-a",
+          "source_url": "https://example.org/a",
+          "source_version": "synthetic-v1",
+          "license": "synthetic",
+          "content_sha256": "de17afa9f3a67a0acfa7e8e525bc316392eb433adfde57d06425630e8a75518e",
+          "score": 2
+        }
+      ]
+    },
+    {
+      "project": "neurapedia",
+      "check": "metric_contract",
+      "passed": true,
+      "metrics": {
+        "dice": 0.5,
+        "iou": 0.3333333333333333,
+        "false_positive_voxels": 1,
+        "false_negative_voxels": 1,
+        "empty_reference": false,
+        "brier_score": 0.0,
+        "ece": 0.0,
+        "mean_binary_entropy": 0.0
+      }
+    },
+    {
+      "project": "robotic-surgery",
+      "check": "fault_injection",
+      "passed": true,
+      "report": {
+        "schema_version": 1,
+        "mode": "simulation-only",
+        "external_actions": [],
+        "scope": "eight deterministic fixtures; no hardware, tissue, clinical or device validation",
+        "case_count": 8,
+        "passed": 8,
+        "cases": [
+          {
+            "case": "healthy_control",
+            "decision": {
+              "status": "approved",
+              "reasons": [],
+              "source_id": "fixture-planner",
+              "sequence": 1,
+              "timestamp_ns": 1000000000,
+              "effective_velocities": [
+                0.2,
+                -0.2
+              ]
+            },
+            "passed": true
+          },
+          {
+            "case": "sensor_dropout",
+            "decision": {
+              "status": "rejected",
+              "reasons": [
+                "sensor_unhealthy"
+              ],
+              "source_id": "fixture-planner",
+              "sequence": 1,
+              "timestamp_ns": 1000000000,
+              "effective_velocities": [
+                0.0,
+                0.0
+              ]
+            },
+            "passed": true
+          },
+          {
+            "case": "latency_spike",
+            "decision": {
+              "status": "rejected",
+              "reasons": [
+                "stale_heartbeat"
+              ],
+              "source_id": "fixture-planner",
+              "sequence": 1,
+              "timestamp_ns": 1000000000,
+              "effective_velocities": [
+                0.0,
+                0.0
+              ]
+            },
+            "passed": true
+          },
+          {
+            "case": "invalid_pose_dimensions",
+            "decision": {
+              "status": "rejected",
+              "reasons": [
+                "joint_dimension_mismatch"
+              ],
+              "source_id": "fixture-planner",
+              "sequence": 1,
+              "timestamp_ns": 1000000000,
+              "effective_velocities": [
+                0.0,
+                0.0
+              ]
+            },
+            "passed": true
+          },
+          {
+            "case": "out_of_workspace",
+            "decision": {
+              "status": "rejected",
+              "reasons": [
+                "joint_0_position_limit",
+                "joint_0_predicted_velocity_limit"
+              ],
+              "source_id": "fixture-planner",
+              "sequence": 1,
+              "timestamp_ns": 1000000000,
+              "effective_velocities": [
+                0.0,
+                0.0
+              ]
+            },
+            "passed": true
+          },
+          {
+            "case": "controller_fault",
+            "decision": {
+              "status": "rejected",
+              "reasons": [
+                "source_not_allowed"
+              ],
+              "source_id": "untrusted-controller",
+              "sequence": 1,
+              "timestamp_ns": 1000000000,
+              "effective_velocities": [
+                0.0,
+                0.0
+              ]
+            },
+            "passed": true
+          },
+          {
+            "case": "emergency_stop",
+            "decision": {
+              "status": "stopped",
+              "reasons": [
+                "emergency_stop_latched"
+              ],
+              "source_id": "fixture-planner",
+              "sequence": 1,
+              "timestamp_ns": 1000000000,
+              "effective_velocities": [
+                0.0,
+                0.0
+              ]
+            },
+            "passed": true
+          },
+          {
+            "case": "command_replay",
+            "decision": {
+              "status": "rejected",
+              "reasons": [
+                "replayed_sequence"
+              ],
+              "source_id": "fixture-planner",
+              "sequence": 1,
+              "timestamp_ns": 1000000000,
+              "effective_velocities": [
+                0.0,
+                0.0
+              ]
+            },
+            "passed": true
+          }
+        ]
+      }
+    }
+  ],
+  "passed": 5,
+  "count": 5
+}
